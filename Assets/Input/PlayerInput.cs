@@ -89,6 +89,24 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FlashLight"",
+                    ""type"": ""Button"",
+                    ""id"": ""80a221c7-e323-4536-b5b7-6a4c53d1d1ad"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FlashOff"",
+                    ""type"": ""Button"",
+                    ""id"": ""fd5a43f6-06e2-4c31-bd4e-9a393fc39880"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -223,6 +241,28 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""Shotgun"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a4fe85e4-b43e-499a-84c4-cbf299297437"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FlashLight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""523d081b-05d7-441f-9687-ee0b7d8d7481"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FlashOff"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -266,6 +306,8 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Alive_SwitchGuns = m_Alive.FindAction("SwitchGuns", throwIfNotFound: true);
         m_Alive_Pistol = m_Alive.FindAction("Pistol", throwIfNotFound: true);
         m_Alive_Shotgun = m_Alive.FindAction("Shotgun", throwIfNotFound: true);
+        m_Alive_FlashLight = m_Alive.FindAction("FlashLight", throwIfNotFound: true);
+        m_Alive_FlashOff = m_Alive.FindAction("FlashOff", throwIfNotFound: true);
         // Dead
         m_Dead = asset.FindActionMap("Dead", throwIfNotFound: true);
         m_Dead_PressButton = m_Dead.FindAction("PressButton", throwIfNotFound: true);
@@ -335,6 +377,8 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Alive_SwitchGuns;
     private readonly InputAction m_Alive_Pistol;
     private readonly InputAction m_Alive_Shotgun;
+    private readonly InputAction m_Alive_FlashLight;
+    private readonly InputAction m_Alive_FlashOff;
     public struct AliveActions
     {
         private @PlayerInput m_Wrapper;
@@ -346,6 +390,8 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @SwitchGuns => m_Wrapper.m_Alive_SwitchGuns;
         public InputAction @Pistol => m_Wrapper.m_Alive_Pistol;
         public InputAction @Shotgun => m_Wrapper.m_Alive_Shotgun;
+        public InputAction @FlashLight => m_Wrapper.m_Alive_FlashLight;
+        public InputAction @FlashOff => m_Wrapper.m_Alive_FlashOff;
         public InputActionMap Get() { return m_Wrapper.m_Alive; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -376,6 +422,12 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Shotgun.started -= m_Wrapper.m_AliveActionsCallbackInterface.OnShotgun;
                 @Shotgun.performed -= m_Wrapper.m_AliveActionsCallbackInterface.OnShotgun;
                 @Shotgun.canceled -= m_Wrapper.m_AliveActionsCallbackInterface.OnShotgun;
+                @FlashLight.started -= m_Wrapper.m_AliveActionsCallbackInterface.OnFlashLight;
+                @FlashLight.performed -= m_Wrapper.m_AliveActionsCallbackInterface.OnFlashLight;
+                @FlashLight.canceled -= m_Wrapper.m_AliveActionsCallbackInterface.OnFlashLight;
+                @FlashOff.started -= m_Wrapper.m_AliveActionsCallbackInterface.OnFlashOff;
+                @FlashOff.performed -= m_Wrapper.m_AliveActionsCallbackInterface.OnFlashOff;
+                @FlashOff.canceled -= m_Wrapper.m_AliveActionsCallbackInterface.OnFlashOff;
             }
             m_Wrapper.m_AliveActionsCallbackInterface = instance;
             if (instance != null)
@@ -401,6 +453,12 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Shotgun.started += instance.OnShotgun;
                 @Shotgun.performed += instance.OnShotgun;
                 @Shotgun.canceled += instance.OnShotgun;
+                @FlashLight.started += instance.OnFlashLight;
+                @FlashLight.performed += instance.OnFlashLight;
+                @FlashLight.canceled += instance.OnFlashLight;
+                @FlashOff.started += instance.OnFlashOff;
+                @FlashOff.performed += instance.OnFlashOff;
+                @FlashOff.canceled += instance.OnFlashOff;
             }
         }
     }
@@ -447,6 +505,8 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnSwitchGuns(InputAction.CallbackContext context);
         void OnPistol(InputAction.CallbackContext context);
         void OnShotgun(InputAction.CallbackContext context);
+        void OnFlashLight(InputAction.CallbackContext context);
+        void OnFlashOff(InputAction.CallbackContext context);
     }
     public interface IDeadActions
     {

@@ -8,13 +8,25 @@ public class WeaponSwitch : MonoBehaviour
     public PlayerInput player;
     public GameObject shotgun;
     public GameObject pistol;
+    public GameObject Flashlight;
 
     void Awake()
     {
         player = new PlayerInput();
         player.Alive.Pistol.performed += ctx => Pistol();
         player.Alive.Shotgun.performed += ctx => Shotgun();
+        player.Alive.FlashLight.performed += ctx => FlashOpen();
+        player.Alive.FlashOff.performed += ctx => FlashClosed();
+    }
 
+    private void FlashOpen()
+    {
+        
+        Flashlight.SetActive(true);
+    }
+    private void FlashClosed()
+    {
+        Flashlight.SetActive(false);
     }
 
     private void OnEnable()

@@ -7,6 +7,11 @@ public class EnemyHealth : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField] float health = 100f;
     public GameManager gameManager;
+    bool isDead = false;
+    public bool IsDead()
+    {
+        return isDead;
+    }
     
     public void Start()
     {
@@ -18,9 +23,16 @@ public class EnemyHealth : MonoBehaviour
         health -= damage;
         if(health <= 0)
         {
-            Destroy(gameObject);
+            Die();
             gameManager.IncreaseScore(1);
         }    
 
+    }
+    private void Die()
+    {
+        if (isDead) return;
+
+        isDead = true;
+        GetComponent<Animator>().SetTrigger("die");
     }
 }
