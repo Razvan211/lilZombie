@@ -13,6 +13,7 @@ public class InputManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        
         playerInput = new PlayerInput();
         Alive = playerInput.Alive;
         motor = GetComponent<PlayerMotor>();

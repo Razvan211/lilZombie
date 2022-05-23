@@ -62,6 +62,33 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchGuns"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""bd1038e2-2d48-496e-ba0f-76e5c6afce52"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pistol"",
+                    ""type"": ""Button"",
+                    ""id"": ""f9d7da2b-129e-4350-b5e1-2c9a53227afc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Shotgun"",
+                    ""type"": ""Button"",
+                    ""id"": ""32b4f18c-588d-4c04-83c7-a3a5b6de10ea"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -152,6 +179,50 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a9e59de8-3044-493e-a67e-29ccd215cb7d"",
+                    ""path"": ""<Mouse>/forwardButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchGuns"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0f02deac-9300-41d5-9395-f9696e40aa15"",
+                    ""path"": ""<Mouse>/backButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchGuns"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3fef021d-ed60-4688-bf32-b4f03714f8ed"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pistol"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7b0865d4-1e4a-41b8-9a93-9c91a24a4285"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shotgun"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -192,6 +263,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Alive_Jump = m_Alive.FindAction("Jump", throwIfNotFound: true);
         m_Alive_Look = m_Alive.FindAction("Look", throwIfNotFound: true);
         m_Alive_Shoot = m_Alive.FindAction("Shoot", throwIfNotFound: true);
+        m_Alive_SwitchGuns = m_Alive.FindAction("SwitchGuns", throwIfNotFound: true);
+        m_Alive_Pistol = m_Alive.FindAction("Pistol", throwIfNotFound: true);
+        m_Alive_Shotgun = m_Alive.FindAction("Shotgun", throwIfNotFound: true);
         // Dead
         m_Dead = asset.FindActionMap("Dead", throwIfNotFound: true);
         m_Dead_PressButton = m_Dead.FindAction("PressButton", throwIfNotFound: true);
@@ -258,6 +332,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Alive_Jump;
     private readonly InputAction m_Alive_Look;
     private readonly InputAction m_Alive_Shoot;
+    private readonly InputAction m_Alive_SwitchGuns;
+    private readonly InputAction m_Alive_Pistol;
+    private readonly InputAction m_Alive_Shotgun;
     public struct AliveActions
     {
         private @PlayerInput m_Wrapper;
@@ -266,6 +343,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_Alive_Jump;
         public InputAction @Look => m_Wrapper.m_Alive_Look;
         public InputAction @Shoot => m_Wrapper.m_Alive_Shoot;
+        public InputAction @SwitchGuns => m_Wrapper.m_Alive_SwitchGuns;
+        public InputAction @Pistol => m_Wrapper.m_Alive_Pistol;
+        public InputAction @Shotgun => m_Wrapper.m_Alive_Shotgun;
         public InputActionMap Get() { return m_Wrapper.m_Alive; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -287,6 +367,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Shoot.started -= m_Wrapper.m_AliveActionsCallbackInterface.OnShoot;
                 @Shoot.performed -= m_Wrapper.m_AliveActionsCallbackInterface.OnShoot;
                 @Shoot.canceled -= m_Wrapper.m_AliveActionsCallbackInterface.OnShoot;
+                @SwitchGuns.started -= m_Wrapper.m_AliveActionsCallbackInterface.OnSwitchGuns;
+                @SwitchGuns.performed -= m_Wrapper.m_AliveActionsCallbackInterface.OnSwitchGuns;
+                @SwitchGuns.canceled -= m_Wrapper.m_AliveActionsCallbackInterface.OnSwitchGuns;
+                @Pistol.started -= m_Wrapper.m_AliveActionsCallbackInterface.OnPistol;
+                @Pistol.performed -= m_Wrapper.m_AliveActionsCallbackInterface.OnPistol;
+                @Pistol.canceled -= m_Wrapper.m_AliveActionsCallbackInterface.OnPistol;
+                @Shotgun.started -= m_Wrapper.m_AliveActionsCallbackInterface.OnShotgun;
+                @Shotgun.performed -= m_Wrapper.m_AliveActionsCallbackInterface.OnShotgun;
+                @Shotgun.canceled -= m_Wrapper.m_AliveActionsCallbackInterface.OnShotgun;
             }
             m_Wrapper.m_AliveActionsCallbackInterface = instance;
             if (instance != null)
@@ -303,6 +392,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Shoot.started += instance.OnShoot;
                 @Shoot.performed += instance.OnShoot;
                 @Shoot.canceled += instance.OnShoot;
+                @SwitchGuns.started += instance.OnSwitchGuns;
+                @SwitchGuns.performed += instance.OnSwitchGuns;
+                @SwitchGuns.canceled += instance.OnSwitchGuns;
+                @Pistol.started += instance.OnPistol;
+                @Pistol.performed += instance.OnPistol;
+                @Pistol.canceled += instance.OnPistol;
+                @Shotgun.started += instance.OnShotgun;
+                @Shotgun.performed += instance.OnShotgun;
+                @Shotgun.canceled += instance.OnShotgun;
             }
         }
     }
@@ -346,6 +444,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
+        void OnSwitchGuns(InputAction.CallbackContext context);
+        void OnPistol(InputAction.CallbackContext context);
+        void OnShotgun(InputAction.CallbackContext context);
     }
     public interface IDeadActions
     {

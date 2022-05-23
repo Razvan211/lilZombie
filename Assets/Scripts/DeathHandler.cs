@@ -10,6 +10,7 @@ public class DeathHandler : MonoBehaviour
     private void Start()
     {
         gameOverCanvas.enabled = false;
+        Cursor.lockState = CursorLockMode.Locked;
 
     }
 
@@ -17,6 +18,7 @@ public class DeathHandler : MonoBehaviour
     {
         gameOverCanvas.enabled = true;
         Time.timeScale = 0;
+        Cursor.lockState = CursorLockMode.None;
         
     }
 }
