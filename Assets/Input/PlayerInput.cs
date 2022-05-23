@@ -154,6 +154,34 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Dead"",
+            ""id"": ""9df019f0-ed4b-4caa-a336-3ae7742fc151"",
+            ""actions"": [
+                {
+                    ""name"": ""PressButton"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""4a1c1bda-a976-45a6-aab4-38ff45f8dbc9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""5a692d30-a4e7-42b9-b0f8-ecff3372cb4d"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PressButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -164,6 +192,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Alive_Jump = m_Alive.FindAction("Jump", throwIfNotFound: true);
         m_Alive_Look = m_Alive.FindAction("Look", throwIfNotFound: true);
         m_Alive_Shoot = m_Alive.FindAction("Shoot", throwIfNotFound: true);
+        // Dead
+        m_Dead = asset.FindActionMap("Dead", throwIfNotFound: true);
+        m_Dead_PressButton = m_Dead.FindAction("PressButton", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -276,11 +307,48 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         }
     }
     public AliveActions @Alive => new AliveActions(this);
+
+    // Dead
+    private readonly InputActionMap m_Dead;
+    private IDeadActions m_DeadActionsCallbackInterface;
+    private readonly InputAction m_Dead_PressButton;
+    public struct DeadActions
+    {
+        private @PlayerInput m_Wrapper;
+        public DeadActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @PressButton => m_Wrapper.m_Dead_PressButton;
+        public InputActionMap Get() { return m_Wrapper.m_Dead; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(DeadActions set) { return set.Get(); }
+        public void SetCallbacks(IDeadActions instance)
+        {
+            if (m_Wrapper.m_DeadActionsCallbackInterface != null)
+            {
+                @PressButton.started -= m_Wrapper.m_DeadActionsCallbackInterface.OnPressButton;
+                @PressButton.performed -= m_Wrapper.m_DeadActionsCallbackInterface.OnPressButton;
+                @PressButton.canceled -= m_Wrapper.m_DeadActionsCallbackInterface.OnPressButton;
+            }
+            m_Wrapper.m_DeadActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @PressButton.started += instance.OnPressButton;
+                @PressButton.performed += instance.OnPressButton;
+                @PressButton.canceled += instance.OnPressButton;
+            }
+        }
+    }
+    public DeadActions @Dead => new DeadActions(this);
     public interface IAliveActions
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
+    }
+    public interface IDeadActions
+    {
+        void OnPressButton(InputAction.CallbackContext context);
     }
 }

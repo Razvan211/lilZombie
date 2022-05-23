@@ -132,6 +132,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Dead",
+            "id": "9df019f0-ed4b-4caa-a336-3ae7742fc151",
+            "actions": [
+                {
+                    "name": "PressButton",
+                    "type": "PassThrough",
+                    "id": "4a1c1bda-a976-45a6-aab4-38ff45f8dbc9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "5a692d30-a4e7-42b9-b0f8-ecff3372cb4d",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PressButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

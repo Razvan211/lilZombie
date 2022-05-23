@@ -7,18 +7,22 @@ public class EnemyAI : MonoBehaviour
 {
     [SerializeField] Transform target;
     [SerializeField] float chaseRange = 5f;
+    [SerializeField] float turnSpeed = 5f;
 
     Animator animator;
+    AnimatorStateInfo animStateInfo;
     NavMeshAgent navMeshAgent;
 
-    bool isWalking = false;
+   
     bool isProvoked = false;
+    bool animationFinished;
     float distanceToTarget = Mathf.Infinity;
    
    
     void Start()
     {
         animator = GetComponent<Animator>();
+       
         navMeshAgent = GetComponent<NavMeshAgent>();
         
     }
@@ -34,29 +38,28 @@ public class EnemyAI : MonoBehaviour
         else if(distanceToTarget <= chaseRange)
         {
             isProvoked = true;
-            isWalking = true;
+     
            
         }
-        else
-        {
-            isWalking = false;
-        }
+       
 
 
-        if(isWalking == true)
+        if(isProvoked == true)
         {
             animator.SetBool("isWalking", true);
         }
         else
         {
             animator.SetBool("isWalking", false);
+            
         }    
         
         
     }
     private void EngageTarget()
     {
-        if(distanceToTarget >= navMeshAgent.stoppingDistance)
+        FaceTarget();
+        if (distanceToTarget >= navMeshAgent.stoppingDistance)
             {
             ChaseTarget();
             }
@@ -66,15 +69,29 @@ public class EnemyAI : MonoBehaviour
             AttackTarget();
             }
     } 
+    public void OnDamageTaken()
+    {
+        isProvoked = true;
+    }
 
     private void ChaseTarget()
     {
+        animator.SetBool("IsAttacking", false);
         navMeshAgent.SetDestination(target.position);
     }
 
     private void AttackTarget()
     {
+        animator.SetBool("IsAttacking", true);
         Debug.Log(name + "attacks" + target.name);
+    }
+
+    private void FaceTarget()
+    {
+        Vector3 direction = (target.position - transform.position).normalized;
+        Quaternion lookRot = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, Time.deltaTime * turnSpeed);
     }
     void OnDrawGizmosSelected()
     {

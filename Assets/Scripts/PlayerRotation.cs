@@ -12,6 +12,7 @@ public class PlayerRotation : MonoBehaviour
 
     public void ProcessLook(Vector2 input)
     {
+       // Cursor.lockState = CursorLockMode.Locked;
         float mouseX = input.x;
         float mouseY = input.y;
 
