@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,11 @@ public class PlayerHealth : MonoBehaviour
             GetComponent<DeathHandler>().HandleDeath();
         }
 
+    }
+
+    public void GetCurrentHealth(int h)
+    {
+        h = (int)Math.Ceiling(health);
     }
   
 }
